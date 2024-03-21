@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { TypePriority } from 'src/types/models.types';
+import { TaskList } from 'src/task-list/task-list.model';
 
 @Entity()
 export class Task {
@@ -21,6 +22,9 @@ export class Task {
     default: TypePriority.LOW,
   })
   priority: TypePriority;
-}
 
-//status
+  @ManyToOne(() => TaskList, (status: TaskList) => status.tasks, {
+    nullable: false,
+  })
+  status: TaskList;
+}
