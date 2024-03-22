@@ -14,11 +14,18 @@ export class TaskService {
   async createTask(dto: CreateTaskDto) {
     const task = await this.taskRepository.save(dto);
 
-    return task;
+    const createTask = await this.taskRepository.findOneBy({
+      id: task.id,
+    });
+    return createTask;
   }
 
   async getAllTask(): Promise<Task[]> {
-    const tasks = await this.taskRepository.find();
+    const tasks = await this.taskRepository.find({
+      relations: {
+        status: true,
+      },
+    });
     return tasks;
   }
 
@@ -26,6 +33,7 @@ export class TaskService {
     const task = await this.taskRepository.findOneBy({
       id,
     });
+    // if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
 
     return task;
   }
@@ -35,9 +43,28 @@ export class TaskService {
       id,
     });
 
-    if (!task) throw new BadRequestException(`Not found task with id=${id}`);
+    if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
 
     await this.taskRepository.delete(id);
     return task;
+  }
+
+  async editTask(id: number, dto: CreateTaskDto) {
+    const task = await this.taskRepository.findOneBy({
+      id,
+    });
+
+    if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
+
+    await this.taskRepository.save({
+      ...task,
+      ...dto,
+    });
+
+    const updateTask = await this.taskRepository.findOneBy({
+      id,
+    });
+
+    return updateTask;
   }
 }

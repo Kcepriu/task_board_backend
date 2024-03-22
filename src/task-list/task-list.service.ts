@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskList } from './task-list.model';
@@ -11,6 +11,14 @@ export class TaskListService {
     private taskListRepository: Repository<TaskList>,
   ) {}
 
+  async getTaskListById(id: number): Promise<TaskList> {
+    const task = await this.taskListRepository.findOneBy({
+      id,
+    });
+
+    return task;
+  }
+
   async createTaskList(dto: CreateTaskListDto) {
     const task = await this.taskListRepository.save(dto);
 
@@ -20,5 +28,33 @@ export class TaskListService {
   async getAllTaskList(): Promise<TaskList[]> {
     const tasks = await this.taskListRepository.find();
     return tasks;
+  }
+
+  async deleteTaskList(id: number) {
+    const task = await this.taskListRepository.findOneBy({
+      id,
+    });
+
+    if (!task)
+      throw new BadRequestException(`Not found task list with id = ${id}`);
+
+    await this.taskListRepository.delete(id);
+    return task;
+  }
+
+  async editTaskList(id: number, dto: CreateTaskListDto) {
+    const taskList = await this.taskListRepository.findOneBy({
+      id,
+    });
+
+    if (!taskList)
+      throw new BadRequestException(`Not found task list with id = ${id}`);
+
+    const updateTaskList = this.taskListRepository.save({
+      ...taskList,
+      ...dto,
+    });
+
+    return updateTaskList;
   }
 }

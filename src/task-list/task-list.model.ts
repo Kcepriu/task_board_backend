@@ -10,8 +10,8 @@ export class TaskList {
   name: string;
 
   @OneToMany(() => Task, (task: Task) => task.status, {
-    cascade: true,
-    eager: true,
+    cascade: ['remove'],
+    // eager: true,
   })
   tasks: Task[];
 }

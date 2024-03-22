@@ -13,10 +13,7 @@ export class TaskExistMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const id = req.params['id'];
     const task = await this.taskService.getTaskById(Number(id));
-
-    console.log('Request...', task);
-    if (!task) throw new BadRequestException(`Not found task with1 id=${id}`);
-
+    if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
     next();
   }
 }

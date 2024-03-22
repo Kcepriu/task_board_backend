@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
 import { TypePriority } from 'src/types/models.types';
 import { TaskList } from 'src/task-list/task-list.model';
+import { IsTaskListExist } from '../isTaskListExist.validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -19,5 +20,6 @@ export class CreateTaskDto {
   readonly priority: TypePriority;
 
   @IsNotEmpty()
+  @IsTaskListExist()
   readonly status: TaskList;
 }
