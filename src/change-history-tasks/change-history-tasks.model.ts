@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { TypeOperation } from 'src/types/models.types';
-
+import { Task } from 'src/task/task.model';
 @Entity()
 export class ChangeHistoryTask {
   @PrimaryGeneratedColumn()
@@ -24,4 +24,11 @@ export class ChangeHistoryTask {
 
   @Column({ default: '' })
   data_after: string;
+
+  @ManyToOne(() => Task, (task: Task) => task.histories, {
+    nullable: true,
+    orphanedRowAction: 'nullify',
+    onDelete: 'SET NULL',
+  })
+  task: Task;
 }

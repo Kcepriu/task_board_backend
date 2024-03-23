@@ -15,6 +15,7 @@ interface IParam {
   operation: string;
   data_before: string;
   data_after: string;
+  task?: number;
 }
 
 @Injectable()
@@ -52,6 +53,7 @@ export class LoggingTaskInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
+        const id = operation === 'DELETE' ? null : data.id;
         if (!nameTask) nameTask = data.name;
         const data_after = operation === 'DELETE' ? '' : JSON.stringify(data);
 
@@ -60,6 +62,7 @@ export class LoggingTaskInterceptor implements NestInterceptor {
           operation: TypeOperation[operation],
           data_before,
           data_after,
+          task: id,
         });
 
         return data; // Повертаємо дані без змін
