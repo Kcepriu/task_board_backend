@@ -18,6 +18,7 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
+  @UseInterceptors(LoggingTaskInterceptor)
   createTask(@Body() taskDto: CreateTaskDto) {
     return this.taskService.createTask(taskDto);
   }
@@ -39,6 +40,7 @@ export class TaskController {
   }
 
   @Delete(':id')
+  @UseInterceptors(LoggingTaskInterceptor)
   deleteTask(@Param('id') id: number) {
     return this.taskService.deleteTask(id);
   }

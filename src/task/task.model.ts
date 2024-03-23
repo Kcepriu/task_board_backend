@@ -13,7 +13,7 @@ export class Task {
   @Column({ default: '' })
   description: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'bigint', default: Date.now() })
   due_date: number;
 
   @Column({

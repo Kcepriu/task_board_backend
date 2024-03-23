@@ -16,6 +16,8 @@ import { TaskExistMiddleware } from './task/taskExist.middleware';
 import { TaskController } from './task/task.controller';
 import { TaskListExistsRule } from './task/isTaskListExist.validator';
 import { BACKEND_ROUTES } from 'src/constants/routes.const';
+import { ChangeHistoryTasksModule } from './change-history-tasks/change-history-tasks.module';
+import { TaskExistsRule } from './task/isTaskExist.validator';
 
 @Module({
   imports: [
@@ -35,9 +37,10 @@ import { BACKEND_ROUTES } from 'src/constants/routes.const';
       autoLoadEntities: true,
     }),
     TaskListModule,
+    ChangeHistoryTasksModule,
   ],
   controllers: [],
-  providers: [TaskListExistsRule],
+  providers: [TaskListExistsRule, TaskExistsRule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

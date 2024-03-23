@@ -7,28 +7,66 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TaskService } from './task.service';
+import { ChangeHistoryTasksService } from 'src/change-history-tasks/change-history-tasks.service';
+import { TypeOperation } from 'src/types/models.types';
+
+interface IParam {
+  nameTask: string;
+  operation: string;
+  data_before: string;
+  data_after: string;
+}
 
 @Injectable()
 export class LoggingTaskInterceptor implements NestInterceptor {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly tasksHistoryService: ChangeHistoryTasksService,
+  ) {}
+
+  private async saveHistory(data: IParam) {
+    //@ts-expect-error "it is true"
+    await this.tasksHistoryService.createTaskHistory({
+      due_date: Date.now(),
+      ...data,
+    });
+  }
 
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
-    const method = request.method; // PATCH
-    const params = request.params; // params
-    console.log('🚀 ~ request.:', method);
+    const operation = request.method; // PATCH
 
-    // const task = await this.taskService.getTaskById(5);
-    // console.log('🚀 ~ task:', task);
+    let data_before = '';
+    let nameTask = '';
+
+    if (operation === 'PATCH' || operation === 'DELETE') {
+      const params = request.params;
+      const id = Number(params.id || 0);
+      const task = await this.taskService.getTaskById(id);
+      data_before = JSON.stringify(task);
+      nameTask = task.name;
+    }
 
     return next.handle().pipe(
       map((data) => {
-        console.log(data); // Отримання даних, які повертає сервер
+        if (!nameTask) nameTask = data.name;
+        const data_after = operation === 'DELETE' ? '' : JSON.stringify(data);
+
+        this.saveHistory({
+          nameTask,
+          operation: TypeOperation[operation],
+          data_before,
+          data_after,
+        });
+
         return data; // Повертаємо дані без змін
       }),
     );
   }
 }
+
+// Треба записувати лог в бази
+// Таска, метод, і дані до і дані після

@@ -5,17 +5,17 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
 } from 'class-validator';
-import { TaskListService } from '../task-list/task-list.service';
+import { TaskService } from './task.service';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class TaskListExistsRule implements ValidatorConstraintInterface {
-  constructor(private readonly taskListService: TaskListService) {}
+export class TaskExistsRule implements ValidatorConstraintInterface {
+  constructor(private readonly taskService: TaskService) {}
 
   async validate(id: number) {
     try {
-      const taskList = await this.taskListService.getTaskListById(id);
-      return !!taskList;
+      const task = await this.taskService.getTaskById(id);
+      return !!task;
     } catch (e) {
       return false;
     }
@@ -25,19 +25,19 @@ export class TaskListExistsRule implements ValidatorConstraintInterface {
 
   //  defaultMessage(args: ValidationArguments) {
   defaultMessage() {
-    return `Task list doesn't exist`;
+    return `Task doesn't exist`;
   }
 }
 
-export function IsTaskListExist(validationOptions?: ValidationOptions) {
+export function IsTaskExist(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'IsTaskListExist',
+      name: 'IsTaskExist',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: TaskListExistsRule,
+      validator: TaskExistsRule,
     });
   };
 }

@@ -12,7 +12,6 @@ export class CreateTaskDto {
   readonly description: string;
 
   @IsNumber()
-  @IsNotEmpty()
   readonly due_date: number;
 
   @IsEnum(TypePriority)
