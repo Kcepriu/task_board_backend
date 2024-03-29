@@ -29,12 +29,27 @@ export class TaskService {
     return tasks;
   }
 
-  async getTaskById(id: number): Promise<Task> {
-    const task = await this.taskRepository.findOneBy({
-      id,
+  async getTaskByIdWithoutHistory(id: number): Promise<Task> {
+    const task = await this.taskRepository.findOne({
+      where: {
+        id,
+      },
     });
+
     // if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
 
+    return task;
+  }
+
+  async getTaskById(id: number): Promise<Task> {
+    const task = await this.taskRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        histories: true,
+      },
+    });
     return task;
   }
 

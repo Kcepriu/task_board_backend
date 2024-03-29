@@ -26,7 +26,11 @@ export class TaskListService {
   }
 
   async getAllTaskList(): Promise<TaskList[]> {
-    const tasks = await this.taskListRepository.find();
+    const tasks = await this.taskListRepository.find({
+      relations: {
+        tasks: true,
+      },
+    });
     return tasks;
   }
 

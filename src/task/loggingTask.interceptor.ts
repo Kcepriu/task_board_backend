@@ -46,7 +46,7 @@ export class LoggingTaskInterceptor implements NestInterceptor {
     if (operation === 'PATCH' || operation === 'DELETE') {
       const params = request.params;
       const id = Number(params.id || 0);
-      const task = await this.taskService.getTaskById(id);
+      const task = await this.taskService.getTaskByIdWithoutHistory(id);
       data_before = JSON.stringify(task);
       nameTask = task.name;
     }

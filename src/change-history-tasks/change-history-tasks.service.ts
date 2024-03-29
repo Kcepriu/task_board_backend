@@ -12,7 +12,11 @@ export class ChangeHistoryTasksService {
   ) {}
 
   async getAllTaskHistory(): Promise<ChangeHistoryTask[]> {
-    const tasks = await this.taskHistoryRepository.find();
+    const tasks = await this.taskHistoryRepository.find({
+      order: {
+        due_date: 'DESC',
+      },
+    });
     return tasks;
   }
 
