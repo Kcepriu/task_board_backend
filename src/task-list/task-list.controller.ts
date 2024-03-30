@@ -1,8 +1,17 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { TaskListService } from './task-list.service';
 import { CreateTaskListDto } from './dto/create-task-list.tdo';
+import { BACKEND_ROUTES } from 'src/constants/routes.const';
 
-@Controller('/api/task-list')
+@Controller(BACKEND_ROUTES.TASK_LIST)
 export class TaskListController {
   constructor(private readonly taskListService: TaskListService) {}
 
@@ -11,8 +20,21 @@ export class TaskListController {
     return this.taskListService.createTaskList(taskListDto);
   }
 
+  @Patch(':id')
+  editTaskList(
+    @Param('id') id: number,
+    @Body() taskListDto: CreateTaskListDto,
+  ) {
+    return this.taskListService.editTaskList(id, taskListDto);
+  }
+
   @Get()
   findAll() {
     return this.taskListService.getAllTaskList();
+  }
+
+  @Delete(':id')
+  deleteTask(@Param('id') id: number) {
+    return this.taskListService.deleteTaskList(id);
   }
 }

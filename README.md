@@ -1,47 +1,32 @@
-Task Board
+# Test task "To do app". Back-end part
 
-## Installation
+This application was written in Node.JS and TypeScript, Nest.js, TypeOrm and Postgresql is used as the database.
 
-```bash
-$ npm install
-```
+## Features
 
-## Running the app
+This application works in conjunction with the front end part, which is hosted at
+https://github.com/Kcepriu/React-App
 
-```bash
-# development
-$ npm run start
+## Available Scripts
 
-# watch mode
-$ npm run start:dev
+In the project directory, you can run:
 
-# production mode
-$ npm run start:prod
-```
+### `npm run start:dev`
 
-## Test
+Runs the app in the development mode.
 
-```bash
-# unit tests
-$ npm run test
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-# e2e tests
-$ npm run test:e2e
+## Settings
 
-# test coverage
-$ npm run test:cov
-```
+To configure the program, you need to create a file ./.env and enter the following data:
 
-## Support
+PORT="Port on which the application will run"
+POSTGRES_HOST=
+POSTGRES_PORT=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DATABASE=
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Alternatively, you can fill in the corresponding environment variables using another method.

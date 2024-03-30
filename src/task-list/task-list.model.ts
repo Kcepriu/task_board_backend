@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from 'src/task/task.model';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class TaskList {
@@ -7,4 +8,10 @@ export class TaskList {
 
   @Column({ nullable: false })
   name: string;
+
+  @OneToMany(() => Task, (task: Task) => task.status, {
+    cascade: ['remove'],
+    // eager: true,
+  })
+  tasks: Task[];
 }
