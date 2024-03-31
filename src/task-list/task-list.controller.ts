@@ -10,7 +10,10 @@ import {
 import { TaskListService } from './task-list.service';
 import { CreateTaskListDto } from './dto/create-task-list.tdo';
 import { BACKEND_ROUTES } from 'src/constants/routes.const';
+// import { TaskList } from './task-list.model';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Task List')
 @Controller(BACKEND_ROUTES.TASK_LIST)
 export class TaskListController {
   constructor(private readonly taskListService: TaskListService) {}
