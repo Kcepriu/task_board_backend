@@ -18,6 +18,9 @@ import { TaskListExistsRule } from './task/isTaskListExist.validator';
 import { BACKEND_ROUTES } from 'src/constants/routes.const';
 import { ChangeHistoryTasksModule } from './change-history-tasks/change-history-tasks.module';
 import { TaskExistsRule } from './task/isTaskExist.validator';
+import { UserModule } from './user/user.module';
+import { User } from './user/user.model';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -32,12 +35,14 @@ import { TaskExistsRule } from './task/isTaskExist.validator';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      entities: [Task, TaskList],
+      entities: [Task, TaskList, User],
       synchronize: true,
       autoLoadEntities: true,
     }),
     TaskListModule,
     ChangeHistoryTasksModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [TaskListExistsRule, TaskExistsRule],

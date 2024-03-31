@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { TypePriority } from 'src/types/models.types';
 import { TaskList } from 'src/task-list/task-list.model';
+import { User } from 'src/user/user.model';
 import { ChangeHistoryTask } from 'src/change-history-tasks/change-history-tasks.model';
 
 @Entity()
@@ -46,4 +47,11 @@ export class Task {
     },
   )
   histories: ChangeHistoryTask[];
+
+  // @ManyToOne(() => User, (status: User) => status.tasks, {
+  //   nullable: false,
+  //   eager: true,
+  //   onDelete: 'CASCADE',
+  // })
+  // user: User;
 }
