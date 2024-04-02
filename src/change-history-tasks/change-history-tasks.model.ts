@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { TypeOperation } from 'src/types/models.types';
 import { Task } from 'src/task/task.model';
+import { User } from 'src/user/user.model';
 @Entity()
 export class ChangeHistoryTask {
   @PrimaryGeneratedColumn()
@@ -31,4 +32,11 @@ export class ChangeHistoryTask {
     onDelete: 'SET NULL',
   })
   task: Task;
+
+  @ManyToOne(() => User, (status: User) => status.histories, {
+    nullable: true,
+    orphanedRowAction: 'nullify',
+    onDelete: 'SET NULL',
+  })
+  user: User;
 }

@@ -1,4 +1,5 @@
 import { Task } from 'src/task/task.model';
+import { ChangeHistoryTask } from 'src/change-history-tasks/change-history-tasks.model';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
@@ -18,8 +19,18 @@ export class User {
   @Column({ nullable: false, default: '' })
   token: string;
 
-  // @OneToMany(() => Task, (task: Task) => task.user, {
-  //   cascade: ['remove'],
-  // })
-  // tasks: Task[];
+  @OneToMany(() => Task, (task: Task) => task.user, {
+    cascade: ['remove'],
+  })
+  tasks: Task[];
+
+  @OneToMany(
+    () => ChangeHistoryTask,
+    (history: ChangeHistoryTask) => history.user,
+    {
+      cascade: ['remove'],
+      onDelete: 'SET NULL',
+    },
+  )
+  histories: ChangeHistoryTask[];
 }

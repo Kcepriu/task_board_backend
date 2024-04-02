@@ -14,7 +14,7 @@ export class TaskExistsRule implements ValidatorConstraintInterface {
 
   async validate(id: number) {
     try {
-      const task = await this.taskService.getTaskById(id);
+      const task = await this.taskService.getTaskByIdWithoutHistory(id);
       return !!task;
     } catch (e) {
       return false;
@@ -23,7 +23,6 @@ export class TaskExistsRule implements ValidatorConstraintInterface {
     return true;
   }
 
-  //  defaultMessage(args: ValidationArguments) {
   defaultMessage() {
     return `Task doesn't exist`;
   }

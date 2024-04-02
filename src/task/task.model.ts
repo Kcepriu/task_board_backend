@@ -48,10 +48,10 @@ export class Task {
   )
   histories: ChangeHistoryTask[];
 
-  // @ManyToOne(() => User, (status: User) => status.tasks, {
-  //   nullable: false,
-  //   eager: true,
-  //   onDelete: 'CASCADE',
-  // })
-  // user: User;
+  @ManyToOne(() => User, (status: User) => status.tasks, {
+    nullable: false,
+    // eager: true,
+    onDelete: 'CASCADE',
+  })
+  user: User;
 }

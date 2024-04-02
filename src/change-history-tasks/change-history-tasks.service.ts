@@ -11,8 +11,11 @@ export class ChangeHistoryTasksService {
     private taskHistoryRepository: Repository<ChangeHistoryTask>,
   ) {}
 
-  async getAllTaskHistory(): Promise<ChangeHistoryTask[]> {
+  async getAllTaskHistory(userId: number): Promise<ChangeHistoryTask[]> {
     const tasks = await this.taskHistoryRepository.find({
+      where: {
+        user: { id: userId },
+      },
       order: {
         due_date: 'DESC',
       },

@@ -11,8 +11,11 @@ export class TaskService {
     private taskRepository: Repository<Task>,
   ) {}
 
-  async createTask(dto: CreateTaskDto) {
-    const task = await this.taskRepository.save(dto);
+  async createTask(dto: CreateTaskDto, userId: number) {
+    const task = await this.taskRepository.save({
+      ...dto,
+      user: { id: userId },
+    });
 
     const createTask = await this.taskRepository.findOneBy({
       id: task.id,
@@ -20,12 +23,23 @@ export class TaskService {
     return createTask;
   }
 
-  async getAllTask(): Promise<Task[]> {
+  async getAllTask(userId: number): Promise<Task[]> {
     const tasks = await this.taskRepository.find({
+      select: {
+        user: {
+          id: true,
+          name: true,
+        },
+      },
+      where: {
+        user: { id: userId },
+      },
       relations: {
         status: true,
+        user: true,
       },
     });
+
     return tasks;
   }
 
@@ -35,27 +49,29 @@ export class TaskService {
         id,
       },
     });
-
-    // if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
-
     return task;
   }
 
-  async getTaskById(id: number): Promise<Task> {
+  async getTaskById(id: number, userId: number): Promise<Task> {
     const task = await this.taskRepository.findOne({
       where: {
         id,
+        user: { id: userId },
       },
       relations: {
         histories: true,
       },
     });
+
+    if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
+
     return task;
   }
 
-  async deleteTask(id: number) {
+  async deleteTask(id: number, userId: number) {
     const task = await this.taskRepository.findOneBy({
       id,
+      user: { id: userId },
     });
 
     if (!task) throw new BadRequestException(`Not found task with id = ${id}`);
@@ -64,9 +80,10 @@ export class TaskService {
     return task;
   }
 
-  async editTask(id: number, dto: CreateTaskDto) {
+  async editTask(id: number, dto: CreateTaskDto, userId: number) {
     const task = await this.taskRepository.findOneBy({
       id,
+      user: { id: userId },
     });
 
     if (!task) throw new BadRequestException(`Not found task with id = ${id}`);

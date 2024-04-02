@@ -16,6 +16,7 @@ interface IParam {
   data_before: string;
   data_after: string;
   task?: number;
+  user: number;
 }
 
 @Injectable()
@@ -63,6 +64,7 @@ export class LoggingTaskInterceptor implements NestInterceptor {
           data_before,
           data_after,
           task: id,
+          user: request.user.id,
         });
 
         return data; // Повертаємо дані без змін
@@ -70,6 +72,3 @@ export class LoggingTaskInterceptor implements NestInterceptor {
     );
   }
 }
-
-// Треба записувати лог в бази
-// Таска, метод, і дані до і дані після
